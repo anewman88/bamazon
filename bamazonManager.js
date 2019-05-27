@@ -34,7 +34,7 @@ connection.connect(function(err) {
 // function ProductManagementMenu()  
 // Prompts the user for what action they want to take
 //**************************************************************************/
-function ProductManagementMenu(CurrentStock) {
+function ProductManagementMenu() {
         if (DebugON) console.log ("In ProductManagementMenu()");
         inquirer.prompt({ 
             // prompt for action

@@ -28,7 +28,7 @@ connection.connect(function(err) {
     // first display (in table form) all items available for sale
     DisplayProducts();
     
-    console.log ("                  Welcome to Bamazon");
+    console.log ("\n\n\n\n                                                Welcome to Bamazon\n");
 
 });  // connection.connect()
 
@@ -84,7 +84,7 @@ function PromptUser(CurrentStock) {
 
             // check if q or Q was entered to exit the program
             if ((answer.ProductID === "q")  || (answer.Quantity === "Q")) {
-                console.log ("Thank you for shopping at Bamazon");
+                console.log ("\nThank you for shopping at Bamazon\n");
                 connection.end();
                 return;
             }   // if
