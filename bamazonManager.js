@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var color = require("colors");
 var LowThreshold = "5";
 var DebugON = true;
 
@@ -21,7 +22,7 @@ var connection = mysql.createConnection({
 //  Connect to the database and call the start or entry into the program
 connection.connect(function(err) {
     if (err) {
-        console.error('error connecting: ' + err.stack);
+        console.error("*** Error connecting database: " + err.stack + " *** ".red);
         return;
     }  // if 
     
@@ -88,7 +89,7 @@ function DisplayProducts() {
     var query = "SELECT * FROM products";
     connection.query(query, function(err, result) {
         if (err) {
-            console.error("In DisplayProducts() query error: " + query + " " + err.stack);
+            console.error("*** In DisplayProducts() query error: " + query + " " + err.stack + " *** ".red);
             return;
         }  // if 
     
@@ -113,7 +114,7 @@ function ViewLowInventory() {
     var query = "SELECT * FROM products WHERE stock_quantity<"+LowThreshold;
     connection.query(query, function(err, lowStock) {
         if (err) {
-            console.error("In ViewLowInventory() query error " + query + " " + err.stack);
+            console.error("*** In ViewLowInventory() query error " + query + " " + err.stack + " *** ".red);
             return;
         }  // if 
         
@@ -159,7 +160,7 @@ function AddToInvetory() {
     console.log ("In AddToInventory \n" + query);
           connection.query(query, function(err, res) {
               if (err) {
-                  console.error("In AddNewProduct() query error: " + query + " " + err.stack);
+                  console.error("*** In AddToInventory() query error: " + query + " " + err.stack + " *** ".red);
                   return;
               }  // if 
       
@@ -210,7 +211,7 @@ function AddNewProduct() {
         var query = "INSERT INTO products SET ?"
         connection.query(query, newProduct, function(err, res) {
             if (err) {
-                console.error("In AddNewProduct() query error: " + query + " " + err.stack);
+                console.error("*** In AddNewProduct() query error: " + query + " " + err.stack + " *** ".red);
                 return;
             }  // if 
     

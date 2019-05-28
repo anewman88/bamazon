@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var colors   = require("colors");
+
 var DebugON = true;
 
 // Connect to the bamazon database 
@@ -34,7 +36,8 @@ connection.connect(function(err) {
 // Prompts the user for what action they want to take
 //**************************************************************************/
 function SupervisorMenu() {
-        if (DebugON) console.log ("In SupervisorMenu()");
+        if (DebugON) console.log ("In SupervisorMenu()".cyan);
+
         inquirer.prompt({ 
             // prompt for action
             name: "action",
@@ -58,7 +61,7 @@ function SupervisorMenu() {
                   break;
           
                 case "Exit Program":
-                  console.log ("Exiting Supervisor View Application");
+                  console.log ("\nExiting Supervisor View Application\n".yellow);
                   connection.end();
                   return;
                   break;  
@@ -73,7 +76,7 @@ function SupervisorMenu() {
 // Prompts user to input new department info and then adds it to the database
 //**************************************************************************/
 function CreateNewDepartment() {
-    if (DebugON) console.log("\nIn CreateNewDepartment()\n");
+    if (DebugON) console.log("\nIn CreateNewDepartment()\n".cyan);
     
     // prompt the user for product information 
     inquirer.prompt([
@@ -90,21 +93,22 @@ function CreateNewDepartment() {
     ])
     .then(function(newDepartment) {
         
-        if (DebugON) console.log ("inserting new department", newDepartment);
+        if (DebugON) console.log ("inserting new department".cyan, newDepartment);
 
-        var query = "INSERT INTO departments SET ?"
+        var query = "INSERT INTO departments SET ?";
+
         connection.query(query, newDepartment, function(err, res) {
             if (err) {
-                console.error("*** In CreateNewDepartment() query error: " + query + " " + err.stack);
+                console.error("*** In CreateNewDepartment() query error: " + query + " " + err.stack + " ***".red);
                 return;
             }  // if 
     
-            console.log(res.affectedRows + " department inserted!\n");
-            
+            console.log("New department inserted successfully!\n".green);
+                 
+            SupervisorMenu();
+ 
       });  // connection.query()
       
-      SupervisorMenu();
-
     });  // inquire.prompt()
 }  // CreateNewDepartment()
 
@@ -115,9 +119,24 @@ function CreateNewDepartment() {
 function DisplayDepartmentSales() {
     
     var query = "SELECT * FROM departments";
+
+    var query = "Select department_id AS department_id, department_name AS department_name, " +
+    "overhead_costs AS overhead_costs, product_sales AS product_sales, " +
+    "(product_sales - overhead_costs) AS total_profit FROM departments";
+
+    var query = "SELECT B.department_id, A.department_name, B.overhead_costs, sum(A.product_sales) as Total_Sales_By_Dept,"
+    query += "sum(A.product_sales) - B.overhead_costs AS Profit FROM products A, departments B ";
+    query += "WHERE A.department_name = B.department_name GROUP BY department_name ORDER BY department_id ";
+
+    var query = "SELECT d.department_id, d.department_name, d.overhead_costs, ";
+        query += "COALESCE(SUM(p.product_sales), 0) AS product_sales, ";
+        query += "COALESCE(SUM(p.product_sales), 0) - overhead_costs AS total_profit ";
+        query += "FROM departments AS d LEFT JOIN products AS p ON d.department_name = p.department_name ";
+        query += "GROUP BY d.department_name ORDER BY d.department_id";
+
     connection.query(query, function(err, result) {
         if (err) {
-            console.error("*** DisplayDepartmentSales() query error " + query + " " + err.stack);
+            console.error("*** DisplayDepartmentSales() query error \n" + query + "\n" + err.stack);
             return;
         }  // if 
     
@@ -130,5 +149,4 @@ function DisplayDepartmentSales() {
     }); // connect.query()
 
 }  // function DisplayDepartmentSales()
-
 

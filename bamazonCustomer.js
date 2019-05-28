@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var color = require("colors");
 
 var DebugON = false;
 
@@ -21,7 +22,7 @@ var connection = mysql.createConnection({
 //  Connect to the database and call the start or entry into the program
 connection.connect(function(err) {
     if (err) {
-        console.error('error connecting: ' + err.stack);
+        console.error("*** Error connecting database: " + err.stack + " *** ".red);
         return;
     }  // if 
     
@@ -41,7 +42,7 @@ function DisplayProducts() {
     var query = "SELECT * FROM products";
     connection.query(query, function(err, result) {
         if (err) {
-            console.error("*** DisplayProducts query error " + query + " " + err.stack);
+            console.error("*** DisplayProducts() query error " + query + " " + err.stack + " *** ".red);
             return;
         }  // if 
     
@@ -165,7 +166,7 @@ function ProcessOrder(Item, Quantity) {
 
     connection.query(query, function(err, res) {
         if (err) {
-           console.error("*** In ProcessOrder() query error: " + query + " " + err.stack);
+           console.error("*** In ProcessOrder() query error: " + query + " " + err.stack + " *** ".red);
            return;
         }  // if 
    
