@@ -1,8 +1,10 @@
+require("dotenv").config();  // read and set any environment variables with the dotenv package
+
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var color = require("colors");
 var LowThreshold = "5";
-var DebugON = true;
+var DebugON = false;
 
 // Connect to the bamazon database 
 var connection = mysql.createConnection({
@@ -15,7 +17,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
+  password: process.env.MySQL_PW,
   database: "bamazon"
 });
 
@@ -157,7 +159,7 @@ function AddToInvetory() {
           
           var query = "UPDATE products SET stock_quantity = stock_quantity + " + updateProduct.add_quantity
            + " WHERE item_id = " + updateProduct.item_id;
-    console.log ("In AddToInventory \n" + query);
+    
           connection.query(query, function(err, res) {
               if (err) {
                   console.error("*** In AddToInventory() query error: " + query + " " + err.stack + " *** ".red);
@@ -165,11 +167,10 @@ function AddToInvetory() {
               }  // if 
       
               console.log("Stock quantity update!\n");
-              
+
+              ProductManagementMenu();
         });  // connection.query()
-        
-        ProductManagementMenu();
-  
+              
       });  // inquire.prompt()
         
 }  // AddToInventory()
@@ -216,11 +217,9 @@ function AddNewProduct() {
             }  // if 
     
             console.log(res.affectedRows + " product inserted!\n");
-            
+            ProductManagementMenu();
       });  // connection.query()
       
-      ProductManagementMenu();
-
     });  // inquire.prompt()
 }  // AddNewProduct()
 

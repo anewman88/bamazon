@@ -1,8 +1,10 @@
+require("dotenv").config();  // read and set any environment variables with the dotenv package
+
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var colors   = require("colors");
 
-var DebugON = true;
+var DebugON = false;
 
 // Connect to the bamazon database 
 var connection = mysql.createConnection({
@@ -15,7 +17,7 @@ var connection = mysql.createConnection({
   user: "root",
 
   // Your password
-  password: "",
+  password: process.env.MySQL_PW,
   database: "bamazon"
 });
 
