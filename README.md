@@ -2,7 +2,7 @@
 HW Assignment 10 - Node.js &amp; MySQL  
 
 ## Overview Description
-Homework Assignment 10 - LIRI Bamazon
+Homework Assignment 10 - Bamazon
 SMU Programming Bootcamp Spring 2019
 
 The purpose of this assignment is to create a node.js based Amazon-like storefront utilizing the MySQL database software. The app is comprised of 3 programs:
